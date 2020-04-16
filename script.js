@@ -100,104 +100,104 @@ const actionSetB = [
         audioSrc: 'assets/audio/swim.mp3'
       }
 ]
-const actionSetCREWRITE = [
+const actionSetC = [
     {
-        word: 'open',
-        translation: 'открывать',
-        image: 'assets/images/open.jpg',
-        audioSrc: 'assets/audio/open.mp3'
+        word: 'argue',
+        translation: 'спорить',
+        image: 'assets/images/argue.jpg',
+        audioSrc: 'assets/audio/argue.mp3'
       },
       {
-        word: 'play',
-        translation: 'играть',
-        image: 'assets/images/play.jpg',
-        audioSrc: 'assets/audio/play.mp3'
+        word: 'build',
+        translation: 'строить',
+        image: 'assets/images/build.jpg',
+        audioSrc: 'assets/audio/build.mp3'
       },
       {
-        word: 'point',
-        translation: 'указывать',
-        image: 'assets/images/point.jpg',
-        audioSrc: 'assets/audio/point.mp3'
+        word: 'carry',
+        translation: 'нести',
+        image: 'assets/images/carry.jpg',
+        audioSrc: 'assets/audio/carry.mp3'
       },
       {
-        word: 'ride',
-        translation: 'ездить',
-        image: 'assets/images/ride.jpg',
-        audioSrc: 'assets/audio/ride.mp3'
+        word: 'catch',
+        translation: 'ловить',
+        image: 'assets/images/catch.jpg',
+        audioSrc: 'assets/audio/catch.mp3'
       },
       {
-        word: 'run',
-        translation: 'бегать',
-        image: 'assets/images/run.jpg',
-        audioSrc: 'assets/audio/run.mp3'
+        word: 'drive',
+        translation: 'водить машину',
+        image: 'assets/images/drive.jpg',
+        audioSrc: 'assets/audio/drive.mp3'
       },
       {
-        word: 'sing',
-        translation: 'петь',
-        image: 'assets/images/sing.jpg',
-        audioSrc: 'assets/audio/sing.mp3'
+        word: 'drop',
+        translation: 'падать',
+        image: 'assets/images/drop.jpg',
+        audioSrc: 'assets/audio/drop.mp3'
       },
       {
-        word: 'skip',
-        translation: 'пропускать, прыгать',
-        image: 'assets/images/skip.jpg',
-        audioSrc: 'assets/audio/skip.mp3'
+        word: 'pull',
+        translation: 'тянуть',
+        image: 'assets/images/pull.jpg',
+        audioSrc: 'assets/audio/pull.mp3'
       },
       {
-        word: 'swim',
-        translation: 'плавать',
-        image: 'assets/images/swim.jpg',
-        audioSrc: 'assets/audio/swim.mp3'
+        word: 'push',
+        translation: 'толкать',
+        image: 'assets/images/push.jpg',
+        audioSrc: 'assets/audio/push.mp3'
       }
 ]
-const adjectiveREWRITE = [
+const adjective = [
     {
-        word: 'open',
-        translation: 'открывать',
-        image: 'assets/images/open.jpg',
-        audioSrc: 'assets/audio/open.mp3'
+        word: 'big',
+        translation: 'большой',
+        image: 'assets/images/big.jpg',
+        audioSrc: 'assets/audio/big.mp3'
       },
       {
-        word: 'play',
-        translation: 'играть',
-        image: 'assets/images/play.jpg',
-        audioSrc: 'assets/audio/play.mp3'
+        word: 'small',
+        translation: 'маленький',
+        image: 'assets/images/small.jpg',
+        audioSrc: 'assets/audio/small.mp3'
       },
       {
-        word: 'point',
-        translation: 'указывать',
-        image: 'assets/images/point.jpg',
-        audioSrc: 'assets/audio/point.mp3'
+        word: 'fast',
+        translation: 'быстрый',
+        image: 'assets/images/fast.jpg',
+        audioSrc: 'assets/audio/fast.mp3'
       },
       {
-        word: 'ride',
-        translation: 'ездить',
-        image: 'assets/images/ride.jpg',
-        audioSrc: 'assets/audio/ride.mp3'
+        word: 'slow',
+        translation: 'медленный',
+        image: 'assets/images/slow.jpg',
+        audioSrc: 'assets/audio/slow.mp3'
       },
       {
-        word: 'run',
-        translation: 'бегать',
-        image: 'assets/images/run.jpg',
-        audioSrc: 'assets/audio/run.mp3'
+        word: 'friendly',
+        translation: 'дружелюбный',
+        image: 'assets/images/friendly.jpg',
+        audioSrc: 'assets/audio/friendly.mp3'
       },
       {
-        word: 'sing',
-        translation: 'петь',
-        image: 'assets/images/sing.jpg',
-        audioSrc: 'assets/audio/sing.mp3'
+        word: 'unfriendly',
+        translation: 'недружелюбный',
+        image: 'assets/images/unfriendly.jpg',
+        audioSrc: 'assets/audio/unfriendly.mp3'
       },
       {
-        word: 'skip',
-        translation: 'пропускать, прыгать',
-        image: 'assets/images/skip.jpg',
-        audioSrc: 'assets/audio/skip.mp3'
+        word: 'old',
+        translation: 'старый',
+        image: 'assets/images/old.jpg',
+        audioSrc: 'assets/audio/old.mp3'
       },
       {
-        word: 'swim',
-        translation: 'плавать',
-        image: 'assets/images/swim.jpg',
-        audioSrc: 'assets/audio/swim.mp3'
+        word: 'young',
+        translation: 'молодой',
+        image: 'assets/images/young.jpg',
+        audioSrc: 'assets/audio/young.mp3'
       }
 ]
 const animalSetA = [
@@ -401,7 +401,7 @@ const emotion = [
       }
 ]
 const data = [
-  actionSetA, actionSetB, actionSetCREWRITE, adjectiveREWRITE, animalSetA, actionSetB, clothes, emotion 
+  actionSetA, actionSetB, actionSetC, adjective, animalSetA, actionSetB, clothes, emotion 
 ]
 
 const menuSwitcher  = document.querySelector('.menu-switcher')
@@ -412,6 +412,7 @@ const main          = document.querySelector('.main')
 const words         = document.createElement('div')
 const menu          = document.querySelector('.sliding-menu')
 const playButton    = document.createElement('button')
+const logo            = document.querySelector('.card-logo')
 
       words.classList.add('categories')
 
@@ -520,6 +521,9 @@ function revealCardsByClick(e) {
         menuSwitcher.click()
     }
 
+    playButton.innerText = 'START'
+    playButton.classList.remove('play-button-active')
+
     switch(target.innerText) {
         case 'Main Page':
             main.lastElementChild.remove()
@@ -533,10 +537,10 @@ function revealCardsByClick(e) {
             createWordsField(actionSetB)
             break;
         case 'Action (set C)':
-            createWordsField(actionSetCREWRITE)
+            createWordsField(actionSetC)
             break;
         case 'Adjective':
-            createWordsField(adjectiveREWRITE)
+            createWordsField(adjective)
             break;
         case 'Animal (set A)':
             createWordsField(animalSetA)
@@ -553,10 +557,14 @@ function revealCardsByClick(e) {
     }
 }
 
-function sayCardWord(e) {
+function sayCardWord(e) { 
     let { target } = e
-    
-    if(target.className === 'word-card' || target.className === 'card-logo') {
+
+    let playCard = document.querySelector('.card-playing')
+
+    if(playCard !== null) return
+    if(target.className === 'word-card' || target.className === 'card-logo' ) {
+
       let audioSrc = target.parentElement.parentElement.parentElement.getAttribute('data-audio')
 
       let phranse = new Audio(audioSrc)
@@ -583,14 +591,14 @@ function rotateCard(e) {
 function onMouseOut(e, elem) {
   let { target } = e
 
-  if(target.className !== 'category-back') return
+  if(target.className !== 'card-logo') return
 
-  target.parentElement.classList.remove('hover')
-  target.parentElement.parentElement.classList.remove('hover')
+    target.parentElement.parentElement.classList.remove('hover')
+    target.parentElement.parentElement.parentElement.classList.remove('hover')
 
-  setTimeout(() => {
-    elem.classList.remove('rotate-sym-hidden')
-  }, 200)
+    setTimeout(() => {
+      elem.classList.remove('rotate-sym-hidden')
+    }, 200)
 }
 
 function toggleSwitcher(e){
@@ -648,6 +656,10 @@ function checkApplicationState() {
     menu.classList.add('sliding-menu-play')
   } else {
     isPlaying = false
+
+    if(document.querySelector('.src-container') !== null) {
+      document.querySelector('.src-container').remove()
+    }
     
     playButton.classList.remove('play-button-active')
     playButton.innerText = 'START'
@@ -673,12 +685,126 @@ function checkApplicationState() {
   }
 }
 
+
+let currentSrc
+let playBut = document.querySelector('.play-button')
+let counter = 0
+
+
+function shuffleAudioSrc(arr) {
+  let audioSources 
+  let newPos, temp;
+
+  for(let i = 0; i < arr.length; i++) {
+    newPos = Math.floor(Math.random() * (i+1))
+    temp = arr[i].getAttribute('data-audio')
+    arr[i] = arr[newPos]
+    arr[newPos] = temp
+ }
+
+ audioSources = arr
+ createSrcContainer(audioSources)
+}
+
+function createSrcContainer(arr) {
+  let srcContainer = document.createElement('div')
+  let srcUl = document.createElement('ul')
+
+   for(let i = 0; i < arr.length; i++){
+     let src = document.createElement('li')
+     src.innerText = arr[i]
+     srcUl.append(src)
+   }
+ 
+   srcContainer.append(srcUl)
+   srcContainer.classList.add('src-container')
+ 
+   document.querySelector('.main').after(srcContainer)
+}
+
 function startGame(e) {
   let { target } = e
+
   if(target.tagName !== 'BUTTON') return
 
-  target.innerText = ''
-  target.classList.add('play-button-active')
+  if(!target.classList.contains('play-button-active')) {
+    shuffleAudioSrc([...words.children],target)
+    counter = 0
+    target.innerText = ''
+    target.classList.add('play-button-active')
+  }  
+
+  let audioSources = []
+  let nodeList = document.querySelectorAll('.src-container > ul > li')
+
+      nodeList.forEach(node => audioSources.push(node.innerText))
+  
+  sayRandomWord(audioSources)
+
+  document.addEventListener('click', (e, audioSources) => {
+    checkIfTrue(e, audioSources)
+  })
+}
+
+function checkIfTrue(e) {
+  let { target } = e
+
+  if(target.className !== 'word-card') return
+  let targetAudio = target.parentElement.parentElement.parentElement.getAttribute('data-audio')
+
+  let audioSources = []
+  let nodeList = document.querySelectorAll('.src-container > ul > li')
+
+      nodeList.forEach(node => audioSources.push(node.innerText))
+  
+  if(document.querySelector('.stars-line') === null) {
+    createStarsLine()
+  }
+
+  if(targetAudio === currentSrc) {
+    addPositiveStars()
+    target.classList.add('card-playing-solved')
+    let audio = new Audio('assets/audio/correct.mp3')
+    audio.play()
+    counter++
+    setTimeout(()=> {
+      sayRandomWord(audioSources)
+    },800)
+  } else {
+    addNegativeStars()
+    let audio = new Audio('assets/audio/error.mp3')
+    audio.play()
+  }
+}
+
+function createStarsLine() {
+  let starsLine = document.createElement('div')
+      starsLine.classList.add('stars-line')
+      document.querySelector('.categories').prepend(starsLine)
+}
+
+function addPositiveStars() {
+      let line = document.querySelector('.stars-line')
+      let star = document.createElement('img')
+      star.setAttribute('src','assets/images/star-win.svg')
+      star.classList.add('star')
+      if(line.getBoundingClientRect().left <  document.querySelector('.categories').getBoundingClientRect().left) {
+        line.prepend(star)
+      } else line.append(star) 
+}
+
+function addNegativeStars() {
+      let line = document.querySelector('.stars-line')
+      let star = document.createElement('img')
+      star.setAttribute('src','assets/images/star.svg')
+      star.classList.add('star')
+      line.append(star) 
+}
+
+function sayRandomWord(arr){
+  currentSrc = arr[counter]
+  let audio = new Audio(arr[counter])
+  audio.play()
 }
 
 document.addEventListener('click', revealCardsByClick)

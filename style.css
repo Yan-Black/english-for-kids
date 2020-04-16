@@ -159,11 +159,12 @@ label {
 
 .categories {
     display: flex;
-    margin: 0 auto;
+    margin: 3% auto;
     width: 80%;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
+    position: relative;
 }
 
 .category-card {
@@ -260,7 +261,7 @@ label {
 }
 
 .rotate-sym:hover {
-    transform: rotate(90deg);
+    transform: rotate(90deg) translateX(2px) translateY(2px)
 }
 
 .rotate-sym:active {
@@ -276,6 +277,10 @@ label {
     height: 10vw;
     width: 15vw;
     box-shadow: 0 8px 6px -6px #F5B041;
+}
+
+.card-playing-solved {
+    opacity: 0.3;
 }
 
 .card-playing:hover {
@@ -325,6 +330,27 @@ label {
     opacity: 0.7;
 }
 
+.stars-line {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    top: -5%;
+    right: 0;
+    direction: rtl;
+    overflow-x: hidden;
+}
+
+.star {
+    width: 70%;
+    height: auto;
+}
+
+.src-container {
+    background: green;
+    list-style: none;
+    display: none;
+}
 @media (max-width: 768px) {
     .sliding-menu {
         width: 40vw;
