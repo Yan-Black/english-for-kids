@@ -4,17 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>English-for-Kids</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="shortcut icon" href="assets//images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="src/style.css">
+    <link rel="shortcut icon" href="src/assets//images/favicon.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="main">
+    <div class="main" id="main">
         <div class="header">
             <div class="menu-switcher">
                 <span class="hamburger"></span>
                 <span class="hamburger"></span>
                 <span class="hamburger"></span>
+            </div>
+            <div class="back-to-main">
+                <a href="#main" class="main-link">Main Page</a>
             </div>
             <div class="mode-switcher">
                 <div class="toggle">
@@ -41,39 +44,39 @@
         </div>
         <div class="categories">
             <a class="category-card" href="#">
-                    <img class="card" src="assets/images/dance.jpg" alt="">
+                    <img class="card" src="src/assets/images/dance.jpg" alt="">
                     Action (set A)
             </a>
             <a class="category-card" href="#">
-                    <img class="card" src="assets/images/swim.jpg" alt="">
+                    <img class="card" src="src/assets/images/swim.jpg" alt="">
                     Action (set B)
             </a>
             <a class="category-card" href="#">
-                    <img class="card" src="assets/images/drop.jpg" alt="">
+                    <img class="card" src="src/assets/images/drop.jpg" alt="">
                     Action (set C)
             </a>
             <a class="category-card" href="#">
-                    <img class="card" src="assets/images/adjective.jpg" alt="">
+                    <img class="card" src="src/assets/images/adjective.jpg" alt="">
                     Adjective
             </a>
             <a class="category-card" href="#">
-                    <img class="card" src="assets/images/cat.jpg" alt="">
+                    <img class="card" src="src/assets/images/cat.jpg" alt="">
                     Animal (set A)
             </a>
             <a class="category-card" href="#">
-                    <img class="card" src="assets/images/bird.jpg" alt="">
+                    <img class="card" src="src/assets/images/bird.jpg" alt="">
                     Animal (set B)
             </a>
             <a class="category-card" href="#">
-                    <img class="card" src="assets/images/blouse.jpg" alt="">
+                    <img class="card" src="src/assets/images/blouse.jpg" alt="">
                     Clothes
             </a>
             <a class="category-card" href="#">
-                    <img class="card" src="assets/images/smile.jpg" alt="">
+                    <img class="card" src="src/assets/images/smile.jpg" alt="">
                     Emotion
             </a>
         </div>
     </div>
-    <script src="script.js" type="module"></script>
+    <script src="./dist/main.js"></script>
 </body>
 </html>
