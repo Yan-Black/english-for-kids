@@ -16,6 +16,30 @@ const playButton    = document.createElement('button')
       playButton.innerText = 'START'
 
   let isPlaying = false 
+  let cardsMap = new Map()
+  let cardsMapSaved
+
+  window.onload = () => {
+    cardsMapSaved = new Map(JSON.parse(localStorage.getItem('map')))
+  
+function createCardsMap() {
+    let statsObject = {
+      attempts: 0,
+      success: 0,
+      failure: 0,
+  } 
+    for(let i = 0; i < data.length; i++) {
+        for(let j = 0; j < data[i].length; j++) {
+            cardsMap.set(data[i][j].word, statsObject)
+        }
+    }
+}
+createCardsMap()
+
+if(cardsMapSaved !== undefined) {
+  cardsMap = cardsMapSaved
+}
+
 
 menuSwitcher.onclick = e => {
     document.querySelector('.sliding-menu').classList.toggle('hidden')
@@ -52,6 +76,9 @@ function createWordsField(collection) {
 
                 let phranse = new Audio(audioSrc)
                 phranse.play()
+                countAttemps(word)
+                console.log(cardsMap);
+                
               }
             })
             createStarsLine()
@@ -86,6 +113,11 @@ function revealCards(elem) {
 
       if(isPlaying && elem.innerText !== 'Main Page') {
         main.after(playButton)
+      }
+
+      if(document.querySelector('.statistic') !== null) {
+         document.querySelector('.statistic-link').classList.remove('statistic-link-active')
+         document.querySelector('.statistic').remove()
       }
 
   switch(elem.innerText) {
@@ -168,12 +200,18 @@ function uncheck() {
 function checkApplicationState() {
   let linksCollection = [...categories.children]
   let mainLink = document.querySelector('.back-to-main')
+  let difficultWords = document.querySelectorAll('.difficult-words')[0]
+  let refreshStats = document.querySelectorAll('.difficult-words')[1]
   let activeIndex
 
   if(switcher.checked) {
     isPlaying = true
 
     mainLink.classList.add('back-to-main-active')
+    if(difficultWords !== undefined) {
+      difficultWords.classList.add('difficult-words-active')
+      refreshStats.classList.add('difficult-words-active')
+    }
 
     if(categoryLinks[0].classList.contains('category-link-active')) {
       linksCollection.forEach(category => {
@@ -197,7 +235,11 @@ function checkApplicationState() {
     isPlaying = false
 
     mainLink.classList.remove('back-to-main-active')
-
+    if(difficultWords !== undefined) {
+      difficultWords.classList.remove('difficult-words-active')
+      refreshStats.classList.remove('difficult-words-active')
+    }
+    
     if(document.querySelector('.src-container') !== null) {
       document.querySelector('.src-container').remove()
     }
@@ -232,7 +274,7 @@ let currentSrc
 let counter = 0
 let errors = 0
 
-//Game functions from 237 to 419
+//Game functions from 247 to 431
 
 function shuffleAudioSrc(arr) {
   let audioSources 
@@ -304,11 +346,14 @@ function checkIfTrue(e) {
 
   let audioSources = []
   let isWin
+  let res
   let nodeList = document.querySelectorAll('.src-container > ul > li')
 
       nodeList.forEach(node => audioSources.push(node.innerText))
 
   if(targetAudio === currentSrc) {
+    res = true
+
     let starsLine = document.querySelector('.stars-line')   
         
     if(counter === 7 && starsLine.children.length === 7) {
@@ -325,6 +370,7 @@ function checkIfTrue(e) {
       }, 1000)
     }
 
+    countSuccessFailure(target, res)
     addStars('src/assets/images/star-win.svg')
 
       target.classList.add('card-playing-solved')
@@ -339,9 +385,13 @@ function checkIfTrue(e) {
     },800)
 
   } else {
+    res = false
 
+    countSuccessFailure(target, res)
     addStars('src/assets/images/star.svg')
 
+    console.log(cardsMap);
+    
       errors++
       
     let audio = new Audio('src/assets/audio/error.mp3')
@@ -418,6 +468,112 @@ function createResultImage(state, errors) {
       }, 1500)
 }
 
+//Statistic functions
+
+function createStatisticPage(e) {
+  if(e.target.innerText !== 'Statistic') return
+  menuSwitcher.click()
+
+  const statsPage = document.createElement('div')
+  const statsHeader = document.createElement('div')
+  const closeStats = document.createElement('div')
+  const refreshStats = document.createElement('div')
+  const difficultWords = document.createElement('div')
+  let stats = document.createElement('table')
+  let statsLink = document.querySelector('.statistic-link')
+  let tr = document.createElement('tr')
+  
+  let statsHeaders = ['Word','Category','Translation','Train','Success','Fails','Fail/Win %']
+  let categories = ['Action set(A)','Action set(B)','Action set(C)','Adjective','Animal set(A)', 'Animal set(B)','Clothes','Emotion']
+
+  for(let i = 0; i < statsHeaders.length; i++) {
+    let th = document.createElement('th')
+        th.innerText = statsHeaders[i]
+
+        tr.append(th)
+  }
+
+  stats.append(tr)
+  stats.classList.add('stats')
+
+  for(let i = 0; i < data.length; i++) {
+    for(let j = 0; j < data[i].length; j++) {
+      let td1 = document.createElement('td')
+      let td2 = document.createElement('td')
+      let td3 = document.createElement('td')
+      let td4 = document.createElement('td')
+      let td5 = document.createElement('td')
+      let td6 = document.createElement('td')
+      let td7 = document.createElement('td')
+      let tr = document.createElement('tr')
+
+      let success = cardsMap.get(data[i][j].word).success
+      let failure = cardsMap.get(data[i][j].word).failure
+      
+      td1.innerText = data[i][j].word
+      td2.innerText = categories[i]
+      td3.innerText = data[i][j].translation
+      td4.innerText = cardsMap.get(data[i][j].word).attempts
+      td5.innerText = success
+      td6.innerText = failure
+      td7.innerText = failure / (success + failure) * 100 + '%'
+      
+      tr.append(td1, td2, td3, td4, td5, td6, td7)
+
+      stats.append(tr)
+    }
+  }
+
+  statsPage.classList.add('statistic')
+  statsHeader.classList.add('stats-header')
+  closeStats.classList.add('close-stats')
+  difficultWords.classList.add('difficult-words')
+  difficultWords.innerText = 'Difficult Words'
+  refreshStats.classList.add('difficult-words')
+  refreshStats.innerText = 'Refresh stats'
+  statsLink.classList.add('statistic-link-active')
+
+  if(isPlaying) {
+    difficultWords.classList.add('difficult-words-active')
+    refreshStats.classList.add('difficult-words-active')
+  }
+
+  statsHeader.append(difficultWords, refreshStats ,closeStats)
+  statsPage.append(statsHeader, stats)  
+
+  document.querySelector('.categories').prepend(statsPage)
+  closeStats.onclick = () => {
+    statsLink.classList.remove('statistic-link-active');
+    refreshStats.classList.remove('difficult-words-active')
+    statsPage.remove()
+  }
+}
+
+function countAttemps(card) {
+  let cardText = card.lastElementChild.firstElementChild.lastElementChild.innerText
+  let obj = {}
+
+  Object.assign(obj,cardsMap.get(cardText))
+  
+  obj.attempts++
+  cardsMap.set(cardText, obj)
+}
+
+function countSuccessFailure(card, res) {
+  let key = card.getAttribute('src')
+      key = key.slice(18, key.length-4)
+
+  let obj = {}
+
+  Object.assign(obj,cardsMap.get(key))
+
+  res ? obj.success++ : obj.failure++
+
+  cardsMap.set(key, obj)
+}
+
+document.addEventListener('click', createStatisticPage)
+
 document.addEventListener('click', e => {
   revealCardsByClick(e)
   rotateCard(e)
@@ -426,3 +582,9 @@ document.addEventListener('click', e => {
   closeAsideMenuOnDocumentClick(e)
   checkIfTrue(e)
 })
+
+window.addEventListener('unload', () => {
+  let cardsMapSave = JSON.stringify(Array.from(cardsMap.entries()))
+  localStorage.setItem('map', cardsMapSave)
+})
+}

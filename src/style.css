@@ -150,20 +150,20 @@ label {
 }
 
 .sliding-menu {
-    height: 100vh;
-    position: absolute;
-    z-index: 1;
+    height: 100%;
+    position: fixed;
+    z-index: 2;
     top: 0;
     left: 0;
     width: 20vw;
     transition: .5s ease-in-out;
     background: rgb(93,173,226);
-    background: linear-gradient(180deg, rgba(93,173,226,1) 0%, rgba(72,201,176,1) 51%, rgba(255,254,253,1) 100%);
+    background: linear-gradient(180deg, rgba(93,173,226,1) 0%, rgba(72,201,176,1) 100%, rgba(255,254,253,1) 100%); 
 }
 
 .sliding-menu-play {
     background: rgb(245,176,65);
-    background: linear-gradient(180deg, rgba(245,176,65,1) 0%, rgba(236,112,99,1) 51%, rgba(255,254,253,1) 100%);
+    background: linear-gradient(180deg, rgba(245,176,65,1) 0%, rgba(236,112,99,1) 100%, rgba(255,254,253,1) 100%);
 }
 
 .transform {
@@ -205,6 +205,7 @@ label {
     flex-wrap: wrap;
     justify-content: space-between;
     position: relative;
+    overflow-y: hidden;
 }
 
 .category-card {
@@ -438,6 +439,96 @@ label {
 .failure {
     background-image: url('assets/images/failure.jpg'); 
 }
+
+.statistic {
+    position: absolute;
+    background: white;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    overflow-y: scroll;
+    border-radius: 5px;
+}
+
+table {
+    border-collapse: collapse;
+   }
+   
+
+.stats {
+    margin-top: 2vw;
+    width: 100%;
+    height: 100%;
+    color: teal; 
+    font-size: 1.8vw;
+    border: 1px solid teal;
+}
+
+.stats td, th {
+    border: 1px solid teal;
+}
+
+.statistic-link {
+    color: white;
+    font-size: 1.5vw;
+    transition: .2s;
+    cursor: pointer;
+}
+
+.statistic-link:hover {
+    color: rgb(245,176,65);
+}
+
+.statistic-link-active {
+    color: rgb(245,176,65);
+    font-size: 1.8vw;
+}
+
+.stats-header {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.close-stats {
+    background: #fff;
+    background-image: url('assets/images/close-stats.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 60px;
+    height: 64px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.close-stats:active {
+    background-image: url('assets/images/closed.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: translateY(1px) translateX(1px);
+}
+
+.difficult-words {
+    width: 120px;
+    height: 60px;
+    font-size: 1.3vw;
+    cursor: pointer;
+    text-align: center;
+    color: white;
+    border-radius: 5px;
+    background: rgb(93,173,226);
+    background: linear-gradient(180deg, rgba(93,173,226,1) 0%, rgba(72,201,176,1) 100%, rgba(255,254,253,1) 100%); 
+}
+
+.difficult-words:active {
+    opacity: 0.5;
+}
+
+.difficult-words-active {
+    background: rgb(245,176,65);
+    background: linear-gradient(180deg, rgba(245,176,65,1) 0%, rgba(236,112,99,1) 100%, rgba(255,254,253,1) 100%);
+}
+
 @media (max-width: 768px) {
     .back-to-main {
         margin-top: 0.5vw;
@@ -451,6 +542,9 @@ label {
         width: 40vw;
     }
     .category-link {
+        font-size: 3.5vw;
+    }
+    .statistic-link {
         font-size: 3.5vw;
     }
     .category-card {
@@ -468,6 +562,15 @@ label {
     .card-playing {
         height: 23vw;
     }
+    .difficult-words {
+        width: 15vw;
+        height: 8vw;
+        font-size: 3vw;
+    }
+    .stats {
+        font-size: 2.4vw;
+        text-align: center;
+    }
 }
 @media (max-width: 500px) {
     .menu-switcher {
@@ -484,7 +587,10 @@ label {
     }
     .category-link {
         font-size: 6vw;
-        line-height: 3;
+        line-height: 2;
+    }
+    .statistic-link {
+        font-size: 6vw;
     }
     .category-card {
         margin-bottom: 10vw;
@@ -510,10 +616,25 @@ label {
         height: 16vw;
         font-size: 10vw;
     }
+    .difficult-words {
+        width: 30vw;
+        height: 16vw;
+        font-size: 6vw;
+    }
+    .stats {
+        font-size: 2.4vw;
+        text-align: center;
+    }
 }
 @media (max-width: 320px) {
     .play-button {
         height: 19vw;
         font-size: 10vw;
+    }
+    .difficult-words {
+        width: 27vw;
+    }
+    .stats {
+        font-size: 2.3vw;
     }
 }
