@@ -41,8 +41,8 @@ if(cardsMapSaved !== undefined) {
   cardsMap = cardsMapSaved
 }
 
-
-menuSwitcher.onclick = e => {
+console.log(cardsMap)
+menuSwitcher.onclick = () => {
     document.querySelector('.sliding-menu').classList.toggle('hidden')
     sticks[0].classList.toggle('to-bottom')
     sticks[1].classList.toggle('fade')
@@ -550,8 +550,9 @@ function createStatisticPage(e) {
 
   statsHeader.append(difficultWords, refreshStats, closeStats)
   statsPage.append(statsHeader, stats)  
-
-  document.querySelector('.main').prepend(statsPage)
+  if(document.querySelector('.statistic') === null) {
+    document.querySelector('.main').prepend(statsPage)
+  }
   closeStats.onclick = () => {
     statsLink.classList.remove('statistic-link-active');
     refreshStats.classList.remove('difficult-words-active')
