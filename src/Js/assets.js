@@ -269,7 +269,7 @@ const animalSetB = [
       },
       {
         word: 'giraffe',
-        translation: 'жирафа',
+        translation: 'жираф',
         image: 'src/assets/images/giraffe.jpg',
         audioSrc: 'src/assets/audio/giraffe.mp3'
       },
