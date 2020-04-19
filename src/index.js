@@ -21,6 +21,7 @@ const playButton    = document.createElement('button')
 
   window.onload = () => {
     cardsMapSaved = new Map(JSON.parse(localStorage.getItem('map')))
+    
   
 function createCardsMap() {
     let statsObject = {
@@ -51,7 +52,7 @@ menuSwitcher.onclick = e => {
 function closeAsideMenuOnDocumentClick(e) {
   if(menu.getBoundingClientRect().right > 0 && e.clientX > menu.getBoundingClientRect().right) {
     menuSwitcher.click()
-  }
+  } 
 }
 
 function createWordsField(collection) {
@@ -77,8 +78,6 @@ function createWordsField(collection) {
                 let phranse = new Audio(audioSrc)
                 phranse.play()
                 countAttemps(word)
-                console.log(cardsMap);
-                
               }
             })
             createStarsLine()
@@ -98,6 +97,9 @@ function ifTargetTagNameIMG(target) {
 }
 
 function revealCards(elem) {
+  switcher.classList.remove('input-disabled')
+  switcher.disabled = false
+
   categoryLinks.forEach(link => {
     link.classList.remove('category-link-active')
     if(elem.innerText === link.innerText) link.classList.add('category-link-active')
@@ -116,9 +118,10 @@ function revealCards(elem) {
       }
 
       if(document.querySelector('.statistic') !== null) {
-         document.querySelector('.statistic-link').classList.remove('statistic-link-active')
          document.querySelector('.statistic').remove()
       }
+
+      document.querySelectorAll('.statistic-link').forEach(link => link.classList.remove('statistic-link-active'))
 
   switch(elem.innerText) {
       case 'Main Page':
@@ -202,12 +205,13 @@ function checkApplicationState() {
   let mainLink = document.querySelector('.back-to-main')
   let difficultWords = document.querySelectorAll('.difficult-words')[0]
   let refreshStats = document.querySelectorAll('.difficult-words')[1]
-  let activeIndex
+  let activeIndex 
 
   if(switcher.checked) {
     isPlaying = true
 
     mainLink.classList.add('back-to-main-active')
+
     if(difficultWords !== undefined) {
       difficultWords.classList.add('difficult-words-active')
       refreshStats.classList.add('difficult-words-active')
@@ -217,7 +221,9 @@ function checkApplicationState() {
       linksCollection.forEach(category => {
         category.classList.add('category-card-play')
       })
-    } else {
+    }
+
+    else {
       for(let i = 0; i < categoryLinks.length; i++){
         if(categoryLinks[i].classList.contains('category-link-active')) {
           activeIndex = i-1
@@ -389,8 +395,6 @@ function checkIfTrue(e) {
 
     countSuccessFailure(target, res)
     addStars('src/assets/images/star.svg')
-
-    console.log(cardsMap);
     
       errors++
       
@@ -534,7 +538,7 @@ function createStatisticPage(e) {
   statsHeader.classList.add('stats-header')
   closeStats.classList.add('close-stats')
   difficultWords.classList.add('difficult-words')
-  difficultWords.innerText = 'Repeat difficult Words'
+  difficultWords.innerText = 'Repeat difficult words'
   refreshStats.classList.add('difficult-words')
   refreshStats.innerText = 'Reset'
   statsLink.classList.add('statistic-link-active')
@@ -544,7 +548,7 @@ function createStatisticPage(e) {
     refreshStats.classList.add('difficult-words-active')
   }
 
-  statsHeader.append(difficultWords, refreshStats ,closeStats)
+  statsHeader.append(difficultWords, refreshStats, closeStats)
   statsPage.append(statsHeader, stats)  
 
   document.querySelector('.main').prepend(statsPage)
@@ -672,12 +676,20 @@ function sortNumbersTable(n) {
 
 function showDifficultWords(e) {
   let { target } = e
-  if(target.innerText !== 'Repeat difficult Words') return
+  if(target.innerText !== 'Repeat difficult words') return
+
+  if(isPlaying) switcher.click()
+
+  switcher.classList.add('input-disabled')
+  switcher.disabled = true
+
 
   let sortedCardsMap = new Map(Array.from(cardsMap).sort((a,b) => b[1].failure - a[1].failure))
   let difficultCollection = Array.from(sortedCardsMap.keys()).splice(0,7)
   let closeButton = document.querySelector('.close-stats')
+
   let wordsData = []
+
   for(let i = 0; i < data.length; i++) {
     for(let j = 0; j < data.length; j++) {
       data[j].forEach(obj => obj.word === difficultCollection[i] ? wordsData.push(obj): obj)
@@ -688,9 +700,9 @@ function showDifficultWords(e) {
     words.innerHTML = ''
           wordsData.forEach(card => {
               if(cardsMap.get(card.word).failure !== 0) {
-                words.append(new Card(card).createCard(isPlaying))
-                main.append(words)
-              }
+                words.append(new Card(card).createCard(false))
+                main.append(words);
+              
               [...words.children].forEach(word => {
                 word.onmouseleave = () => {
                   if(word.classList.contains('transparent')){
@@ -709,14 +721,32 @@ function showDifficultWords(e) {
                   countAttemps(word)
                 }
               })
+            } else {
+              main.append(words);
+            }
             });
+
+          createStarsLine()
+
+          if(document.querySelector('.stats') !== null) {
             closeButton.click()
+          } 
+}
+
+function clearStatistic(e) {
+  let { target } = e
+  if(target.innerText !== 'Reset') return
+
+  let td = document.querySelectorAll('.td-center')
+  td.forEach(td => td.innerText = '0')
+  createCardsMap()
+  
+  localStorage.removeItem('map')
 }
   
-
 document.addEventListener('click', createStatisticPage)
 
-document.addEventListener('click', e => {
+document.addEventListener('click', (e) => {
   revealCardsByClick(e)
   rotateCard(e)
   toggleSwitcher(e)
@@ -724,6 +754,7 @@ document.addEventListener('click', e => {
   closeAsideMenuOnDocumentClick(e)
   checkIfTrue(e)
   showDifficultWords(e)
+  clearStatistic(e)
 })
 
 window.addEventListener('unload', () => {
