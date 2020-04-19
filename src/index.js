@@ -120,13 +120,14 @@ window.onload = () => {
     if (document.querySelector('.statistic') !== null) {
       document.querySelector('.statistic').remove();
     }
-
+    words.classList.remove('hidden-categories');
     document.querySelectorAll('.statistic-link').forEach((link) => link.classList.remove('statistic-link-active'));
 
     switch (elem.innerText) {
       case 'Main Page':
         main.lastElementChild.remove();
         playButton.remove();
+        categories.classList.remove('hidden-categories');
         main.append(categories);
         break;
       case 'Action (set A)':
@@ -548,13 +549,18 @@ window.onload = () => {
 
     statsHeader.append(difficultWords, refreshStats, closeStats);
     statsPage.append(statsHeader, stats);
+
+    let currentPage = document.querySelector('.categories');
+
     if (document.querySelector('.statistic') === null) {
-      document.querySelector('.main').prepend(statsPage);
+      main.prepend(statsPage);
+      currentPage.classList.add('hidden-categories');
     }
     closeStats.onclick = () => {
       statsLink.classList.remove('statistic-link-active');
       refreshStats.classList.remove('difficult-words-active');
       statsPage.remove();
+      currentPage.classList.remove('hidden-categories');
     };
   }
 

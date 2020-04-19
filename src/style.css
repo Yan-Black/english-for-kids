@@ -63,7 +63,7 @@ html {
     height: 26px;
     justify-content: space-between;
     cursor: pointer;
-    z-index: 3;
+    z-index: 4;
     margin-top: 1vw;
 }
 
@@ -164,7 +164,6 @@ label {
     transition: .5s ease-in-out;
     background: rgb(93,173,226);
     background: linear-gradient(180deg, rgba(93,173,226,1) 0%, rgba(72,201,176,1) 100%, rgba(255,254,253,1) 100%); 
-    overflow-y: scroll;
 }
 
 .sliding-menu-play {
@@ -212,6 +211,10 @@ label {
     justify-content: space-between;
     position: relative;
     overflow-y: hidden;
+}
+
+.hidden-categories {
+    display: none;
 }
 
 .category-card {
@@ -586,6 +589,7 @@ table {
     }
     .sliding-menu {
         width: 40vw;
+        overflow-y: scroll;
     }
     .category-link {
         font-size: 3.5vw;
