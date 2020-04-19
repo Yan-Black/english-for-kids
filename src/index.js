@@ -37,11 +37,10 @@ function createCardsMap() {
 }
 createCardsMap()
 
-if(cardsMapSaved && cardsMapSaved.size > 0) {
+if(cardsMapSaved && cardsMapSaved.size > 10) {
   cardsMap = cardsMapSaved
 }
 
-console.log(cardsMap)
 menuSwitcher.onclick = () => {
     document.querySelector('.sliding-menu').classList.toggle('hidden')
     sticks[0].classList.toggle('to-bottom')
