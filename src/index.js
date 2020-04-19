@@ -483,12 +483,15 @@ function createStatisticPage(e) {
   let statsLink = document.querySelector('.statistic-link')
   let tr = document.createElement('tr')
   
-  let statsHeaders = ['Word','Category','Translation','Train','Success','Fails','Fail/Win %']
+  let statsHeaders = ['Word ⇅','Category ⇅','Translation ⇅','Train ⇅','Success ⇅','Fails ⇅','Fail/Win % ⇅']
   let categories = ['Action set(A)','Action set(B)','Action set(C)','Adjective','Animal set(A)', 'Animal set(B)','Clothes','Emotion']
 
   for(let i = 0; i < statsHeaders.length; i++) {
     let th = document.createElement('th')
         th.innerText = statsHeaders[i]
+      if(i < 3) {
+        th.onclick = () => sortLettersTable(i)
+      } else if(i >= 3) th.onclick = () => sortNumbersTable(i)
 
         tr.append(th)
   }
@@ -516,8 +519,11 @@ function createStatisticPage(e) {
       td4.innerText = cardsMap.get(data[i][j].word).attempts
       td5.innerText = success
       td6.innerText = failure
-      td7.innerText = failure / (success + failure) * 100 + '%'
+      td7.innerText = countStats(failure, success)
       
+      td4.classList.add('td-center'); td5.classList.add('td-center');
+      td6.classList.add('td-center'); td7.classList.add('td-center')
+
       tr.append(td1, td2, td3, td4, td5, td6, td7)
 
       stats.append(tr)
@@ -528,9 +534,9 @@ function createStatisticPage(e) {
   statsHeader.classList.add('stats-header')
   closeStats.classList.add('close-stats')
   difficultWords.classList.add('difficult-words')
-  difficultWords.innerText = 'Difficult Words'
+  difficultWords.innerText = 'Repeat difficult Words'
   refreshStats.classList.add('difficult-words')
-  refreshStats.innerText = 'Refresh stats'
+  refreshStats.innerText = 'Reset'
   statsLink.classList.add('statistic-link-active')
 
   if(isPlaying) {
@@ -541,7 +547,7 @@ function createStatisticPage(e) {
   statsHeader.append(difficultWords, refreshStats ,closeStats)
   statsPage.append(statsHeader, stats)  
 
-  document.querySelector('.categories').prepend(statsPage)
+  document.querySelector('.main').prepend(statsPage)
   closeStats.onclick = () => {
     statsLink.classList.remove('statistic-link-active');
     refreshStats.classList.remove('difficult-words-active')
@@ -572,6 +578,142 @@ function countSuccessFailure(card, res) {
   cardsMap.set(key, obj)
 }
 
+function countStats(fail, win) {
+  let percent = 0
+  if(fail === 0 && win !== 0) {
+    percent = 100 
+  }
+  else if (fail === 0 && win === 0) {
+    return percent 
+  } 
+  else {
+    percent = fail / (win + fail) * 100 
+  }
+  return percent.toFixed(2)
+}
+
+function sortLettersTable(n) {
+  let table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+
+  table = document.querySelector('.stats');
+  switching = true;
+  dir = "asc";
+
+  while (switching) {
+    switching = false;
+    rows = table.rows;
+    for (i = 1; i < (rows.length - 1); i++) {
+      shouldSwitch = false;
+      x = rows[i].getElementsByTagName("TD")[n];
+      y = rows[i + 1].getElementsByTagName("TD")[n];
+      if (dir == "asc") {
+        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+          shouldSwitch = true;
+          break;
+        }
+      } else if (dir == "desc") {
+        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+          shouldSwitch = true;
+          break;
+        }
+      }
+    }
+    if (shouldSwitch) {
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+      switchcount ++;
+    } else {
+      if (switchcount == 0 && dir == "asc") {
+        dir = "desc";
+        switching = true;
+      }
+    }
+  }
+}
+
+function sortNumbersTable(n) {
+  let table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+
+  table = document.querySelector('.stats');
+  switching = true;
+  dir = "asc";
+
+  while (switching) {
+    switching = false;
+    rows = table.rows;
+    for (i = 1; i < (rows.length - 1); i++) {
+      shouldSwitch = false;
+      x = rows[i].getElementsByTagName("TD")[n];
+      y = rows[i + 1].getElementsByTagName("TD")[n];
+      if (dir == "asc") {
+        if (Number(x.innerHTML) > Number(y.innerHTML)) {
+          shouldSwitch = true;
+          break;
+        }
+      } else if (dir == "desc") {
+        if (Number(x.innerHTML) < Number(y.innerHTML)) {
+          shouldSwitch = true;
+          break;
+        }
+      }
+    }
+    if (shouldSwitch) {
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+      switchcount ++;
+    } else {
+      if (switchcount == 0 && dir == "asc") {
+        dir = "desc";
+        switching = true;
+      }
+    }
+  }
+}
+
+function showDifficultWords(e) {
+  let { target } = e
+  if(target.innerText !== 'Repeat difficult Words') return
+
+  let sortedCardsMap = new Map(Array.from(cardsMap).sort((a,b) => b[1].failure - a[1].failure))
+  let difficultCollection = Array.from(sortedCardsMap.keys()).splice(0,7)
+  let closeButton = document.querySelector('.close-stats')
+  let wordsData = []
+  for(let i = 0; i < data.length; i++) {
+    for(let j = 0; j < data.length; j++) {
+      data[j].forEach(obj => obj.word === difficultCollection[i] ? wordsData.push(obj): obj)
+    }
+  }
+
+  main.lastElementChild.remove()
+    words.innerHTML = ''
+          wordsData.forEach(card => {
+              if(cardsMap.get(card.word).failure !== 0) {
+                words.append(new Card(card).createCard(isPlaying))
+                main.append(words)
+              }
+              [...words.children].forEach(word => {
+                word.onmouseleave = () => {
+                  if(word.classList.contains('transparent')){
+                      word.classList.remove('transparent')
+                      word.firstElementChild.classList.remove('flipped')
+                      word.firstElementChild.firstElementChild.lastElementChild.lastElementChild.classList.remove('rotate-sym-hidden')
+                  }
+                }
+                word.onclick = (e) => {
+                  if(word.firstElementChild.classList.contains('flipped') || e.target.classList.contains('rotate-sym')) return
+                  if(isPlaying) return
+                  let audioSrc = word.getAttribute('data-audio')
+  
+                  let phranse = new Audio(audioSrc)
+                  phranse.play()
+                  countAttemps(word)
+                }
+              })
+            });
+            closeButton.click()
+}
+  
+
 document.addEventListener('click', createStatisticPage)
 
 document.addEventListener('click', e => {
@@ -581,6 +723,7 @@ document.addEventListener('click', e => {
   startGame(e)
   closeAsideMenuOnDocumentClick(e)
   checkIfTrue(e)
+  showDifficultWords(e)
 })
 
 window.addEventListener('unload', () => {
