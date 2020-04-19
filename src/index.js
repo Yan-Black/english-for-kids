@@ -37,7 +37,7 @@ function createCardsMap() {
 }
 createCardsMap()
 
-if(cardsMapSaved !== undefined) {
+if(cardsMapSaved && cardsMapSaved.size > 0) {
   cardsMap = cardsMapSaved
 }
 
