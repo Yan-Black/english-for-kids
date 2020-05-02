@@ -1,5 +1,5 @@
 import { Card } from './Js/Card.js';
-import { data } from './Js/assets.js';
+import { data } from './Js/Constants.js';
 
 const menuSwitcher = document.querySelector('.menu-switcher');
 const categories = document.querySelector('.categories');
@@ -281,7 +281,7 @@ window.onload = () => {
   let counter = 0;
   let errors = 0;
 
-  // Game functions from 283 to 471
+  // Game functions from 286 to 472
 
   function shuffleAudioSrc(arr) {
     let audioSources;
@@ -486,7 +486,7 @@ window.onload = () => {
     const statsLink = document.querySelector('.statistic-link');
     const tr = document.createElement('tr');
 
-    const statsHeaders = ['Word ⇅', 'Category ⇅', 'Translation ⇅', 'Train ⇅', 'Success ⇅', 'Fails ⇅', 'Fail/Win % ⇅'];
+    const statsHeaders = ['Word ⇅', 'Category ⇅', 'Translation ⇅', 'Training ⇅', 'Success ⇅', 'Fails ⇅', 'Fail % ⇅'];
     const categoriesName = ['Action set(A)', 'Action set(B)', 'Action set(C)', 'Adjective', 'Animal set(A)', 'Animal set(B)', 'Clothes', 'Emotion'];
 
     for (let i = 0; i < statsHeaders.length; i++) {
@@ -550,7 +550,7 @@ window.onload = () => {
     statsHeader.append(difficultWords, refreshStats, closeStats);
     statsPage.append(statsHeader, stats);
 
-    let currentPage = document.querySelector('.categories');
+    const currentPage = document.querySelector('.categories');
 
     if (document.querySelector('.statistic') === null) {
       main.prepend(statsPage);
@@ -589,12 +589,8 @@ window.onload = () => {
 
   function countStats(fail, win) {
     let percent = 0;
-    if (fail === 0 && win !== 0) {
-      percent = 100;
-    } else if (fail === 0 && win === 0) {
-      return percent;
-    } else {
-      percent = fail / (win + fail) * 100;
+    if (fail > 0 || win > 0) {
+      percent = (fail / (win + fail)) * 100;
     }
     return percent.toFixed(2);
   }
@@ -684,9 +680,8 @@ window.onload = () => {
     switcher.classList.add('input-disabled');
     switcher.disabled = true;
 
-
     const sortedCardsMap = new Map(Array.from(cardsMap).sort((a, b) => b[1].failure - a[1].failure));
-    const difficultCollection = Array.from(sortedCardsMap.keys()).splice(0, 7);
+    const difficultCollection = Array.from(sortedCardsMap.keys()).splice(0, 9);
     const closeButton = document.querySelector('.close-stats');
 
     const wordsData = [];
@@ -696,14 +691,14 @@ window.onload = () => {
         data[j].forEach((obj) => (obj.word === difficultCollection[i] ? wordsData.push(obj) : obj));
       }
     }
-
+    
     main.lastElementChild.remove();
     words.innerHTML = '';
     wordsData.forEach((card) => {
       if (cardsMap.get(card.word).failure !== 0) {
         words.append(new Card(card).createCard(false));
         main.append(words);
-
+        
         [...words.children].forEach((word) => {
           word.onmouseleave = () => {
             if (word.classList.contains('transparent')) {

@@ -24,10 +24,10 @@ const actionSetA = [
     audioSrc: 'src/assets/audio/draw.mp3',
   },
   {
-    word: 'fish',
+    word: 'fishing',
     translation: 'ловить рыбу',
-    image: 'src/assets/images/fish.jpg',
-    audioSrc: 'src/assets/audio/fish.mp3',
+    image: 'src/assets/images/fishing.jpg',
+    audioSrc: 'src/assets/audio/fishing.mp3',
   },
   {
     word: 'fly',
@@ -258,7 +258,7 @@ const animalSetB = [
   {
     word: 'fish',
     translation: 'рыба',
-    image: 'src/assets/images/fish1.jpg',
+    image: 'src/assets/images/fish.jpg',
     audioSrc: 'src/assets/audio/fish.mp3',
   },
   {
