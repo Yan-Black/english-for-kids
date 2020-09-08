@@ -1,11 +1,17 @@
+/* eslint-disable import/no-named-as-default-member */
 import Card from './components/Card';
 import data from './constants/game-data';
+import successAudio from './assets/audio/correct.mp3';
+import errorAudio from './assets/audio/error.mp3';
+import winAudio from './assets/audio/success.mp3';
+import failAudio from './assets/audio/failure.mp3';
+import starEmpty from './assets/images/star.svg';
+import starWin from './assets/images/star-win.svg';
 import {
   countAttemps,
   createCardsMap,
   createStarsLine,
   createSrcContainer,
-  sayRandomWord,
   sortLettersTable,
   sortNumbersTable,
   countSuccessFailure,
@@ -295,6 +301,12 @@ window.onload = () => {
     createSrcContainer(audioSources);
   }
 
+  function sayRandomWord(arr) {
+    currentSrc = arr[counter];
+    const audio = new Audio(arr[counter]);
+    audio.play();
+  }
+
   function startGame(e) {
     const { target } = e;
 
@@ -318,7 +330,7 @@ window.onload = () => {
 
     nodeList.forEach((node) => audioSources.push(node.innerText));
     setTimeout(() => {
-      sayRandomWord(audioSources, currentSrc, counter);
+      sayRandomWord(audioSources);
     }, 200);
   }
 
@@ -330,14 +342,14 @@ window.onload = () => {
     if (state) {
       phrase.innerText = 'Win!';
 
-      const audio = new Audio('src/assets/audio/success.mp3');
+      const audio = new Audio(winAudio);
       audio.play();
     }
     if (!state) {
       success.classList.add('failure');
       phrase.innerText = `${err} Error(s)!`;
 
-      const audio = new Audio('src/assets/audio/failure.mp3');
+      const audio = new Audio(failAudio);
       audio.play();
     }
 
@@ -376,7 +388,7 @@ window.onload = () => {
     const nodeList = document.querySelectorAll('.src-container > ul > li');
 
     nodeList.forEach((node) => audioSources.push(node.innerText));
-
+    console.log(currentSrc);
     if (targetAudio === currentSrc) {
       res = true;
 
@@ -396,12 +408,12 @@ window.onload = () => {
         }, 1000);
       }
 
-      countSuccessFailure(target, res);
-      addStars('src/assets/images/star-win.svg');
+      countSuccessFailure(target, res, cardsMap);
+      addStars(starWin);
 
       target.classList.add('card-playing-solved');
 
-      const audio = new Audio('src/assets/audio/correct.mp3');
+      const audio = new Audio(successAudio);
       audio.play();
 
       counter++;
@@ -412,12 +424,12 @@ window.onload = () => {
     } else {
       res = false;
 
-      countSuccessFailure(target, res);
-      addStars('src/assets/images/star.svg');
+      countSuccessFailure(target, res, cardsMap);
+      addStars(starEmpty);
 
       errors++;
 
-      const audio = new Audio('src/assets/audio/error.mp3');
+      const audio = new Audio(errorAudio);
       audio.play();
     }
   }
