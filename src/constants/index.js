@@ -45,13 +45,6 @@ export function createSrcContainer(arr) {
   document.querySelector('.main').after(srcContainer);
 }
 
-export function sayRandomWord(arr, currentSrc, counter) {
-  currentSrc = arr[counter];
-
-  const audio = new Audio(arr[counter]);
-  audio.play();
-}
-
 export function countSuccessFailure(card, res, cardsMap) {
   let key = card.getAttribute('src');
   key = key.slice(18, key.length - 4);
