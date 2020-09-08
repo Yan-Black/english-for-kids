@@ -1,3 +1,5 @@
+import rotate from '../assets/images/rotate.png';
+
 export default class Card {
   constructor({
     word, translation, image, audioSrc,
@@ -32,7 +34,7 @@ export default class Card {
     cardImage.setAttribute('src', `${this.image}`);
     cardImage.classList.add('word-card');
 
-    rotateImage.setAttribute('src', 'src/assets/images/Rotate.png');
+    rotateImage.setAttribute('src', rotate);
     rotateImage.classList.add('rotate-sym');
 
     cardLogo.classList.add('card-logo');
