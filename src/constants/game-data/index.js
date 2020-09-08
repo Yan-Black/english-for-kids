@@ -399,6 +399,6 @@ const emotion = [
   },
 ];
 
-export const data = [
+export default [
   actionSetA, actionSetB, actionSetC, adjective, animalSetA, animalSetB, clothes, emotion,
 ];

@@ -1,5 +1,19 @@
-import { Card } from './Js/Card.js';
-import { data } from './Js/Constants.js';
+import Card from './components/Card';
+import data from './constants/game-data';
+import {
+  countAttemps,
+  createCardsMap,
+  createStarsLine,
+  createSrcContainer,
+  sayRandomWord,
+  sortLettersTable,
+  sortNumbersTable,
+  countSuccessFailure,
+  addStars,
+  countStats,
+  clearStatistic,
+} from './constants';
+import './style.css';
 
 const menuSwitcher = document.querySelector('.menu-switcher');
 const categories = document.querySelector('.categories');
@@ -7,14 +21,24 @@ const categoryLinks = document.querySelectorAll('.category-link');
 const sticks = document.querySelectorAll('.hamburger');
 const main = document.querySelector('.main');
 const words = document.createElement('div');
-const menu = document.querySelector('.sliding-menu');
-const playButton = document.createElement('button');
-const switcher = document.getElementById('switcher');
-
 words.classList.add('categories');
-
+const menu = document.querySelector('.sliding-menu');
+menuSwitcher.onclick = () => {
+  document.querySelector('.sliding-menu').classList.toggle('hidden');
+  sticks[0].classList.toggle('to-bottom');
+  sticks[1].classList.toggle('fade');
+  sticks[2].classList.toggle('to-top');
+};
+const playButton = document.createElement('button');
 playButton.classList.add('play-button');
 playButton.innerText = 'START';
+const switcher = document.getElementById('switcher');
+
+function closeAsideMenuOnDocumentClick(e) {
+  if (menu.getBoundingClientRect().right > 0 && e.clientX > menu.getBoundingClientRect().right) {
+    menuSwitcher.click();
+  }
+}
 
 let isPlaying = false;
 let cardsMap = new Map();
@@ -22,37 +46,10 @@ let cardsMapSaved;
 
 window.onload = () => {
   cardsMapSaved = new Map(JSON.parse(localStorage.getItem('map')));
-
-
-  function createCardsMap() {
-    const statsObject = {
-      attempts: 0,
-      success: 0,
-      failure: 0,
-    };
-    for (let i = 0; i < data.length; i++) {
-      for (let j = 0; j < data[i].length; j++) {
-        cardsMap.set(data[i][j].word, statsObject);
-      }
-    }
-  }
-  createCardsMap();
+  createCardsMap(cardsMap, data);
 
   if (cardsMapSaved && cardsMapSaved.size > 0) {
     cardsMap = cardsMapSaved;
-  }
-
-  menuSwitcher.onclick = () => {
-    document.querySelector('.sliding-menu').classList.toggle('hidden');
-    sticks[0].classList.toggle('to-bottom');
-    sticks[1].classList.toggle('fade');
-    sticks[2].classList.toggle('to-top');
-  };
-
-  function closeAsideMenuOnDocumentClick(e) {
-    if (menu.getBoundingClientRect().right > 0 && e.clientX > menu.getBoundingClientRect().right) {
-      menuSwitcher.click();
-    }
   }
 
   function createWordsField(collection) {
@@ -77,23 +74,10 @@ window.onload = () => {
 
         const phranse = new Audio(audioSrc);
         phranse.play();
-        countAttemps(word);
+        countAttemps(word, cardsMap);
       };
     });
     createStarsLine();
-  }
-
-  function ifTargetTagNameA(e, target) {
-    if (target.tagName !== 'A') return;
-    e.preventDefault();
-    revealCards(target);
-  }
-
-  function ifTargetTagNameIMG(target) {
-    if (target.tagName !== 'IMG' || target.className === 'word-card' || target.className === 'rotate-sym') return;
-    if (target.classList.contains('card-playing-solved') || target.classList.contains('star')) return;
-
-    revealCards(target.parentElement);
   }
 
   function revealCards(elem) {
@@ -157,6 +141,19 @@ window.onload = () => {
       default:
         break;
     }
+  }
+
+  function ifTargetTagNameA(e, target) {
+    if (target.tagName !== 'A') return;
+    e.preventDefault();
+    revealCards(target);
+  }
+
+  function ifTargetTagNameIMG(target) {
+    if (target.tagName !== 'IMG' || target.className === 'word-card' || target.className === 'rotate-sym') return;
+    if (target.classList.contains('card-playing-solved') || target.classList.contains('star')) return;
+
+    revealCards(target.parentElement);
   }
 
   function revealCardsByClick(e) {
@@ -281,12 +278,11 @@ window.onload = () => {
   let counter = 0;
   let errors = 0;
 
-  // Game functions from 286 to 472
+  // Game functions
 
   function shuffleAudioSrc(arr) {
-    let audioSources;
-    let newPos; let
-      temp;
+    let newPos;
+    let temp;
 
     for (let i = 0; i < arr.length; i++) {
       newPos = Math.floor(Math.random() * (i + 1));
@@ -295,26 +291,8 @@ window.onload = () => {
       arr[newPos] = temp;
     }
 
-    audioSources = arr;
+    const audioSources = arr;
     createSrcContainer(audioSources);
-  }
-
-  function createSrcContainer(arr) {
-    const srcContainer = document.createElement('div');
-    const srcUl = document.createElement('ul');
-
-    for (let i = 0; i < arr.length; i++) {
-      const src = document.createElement('li');
-      src.innerText = arr[i];
-      if (src.innerText !== '') {
-        srcUl.append(src);
-      }
-    }
-
-    srcContainer.append(srcUl);
-    srcContainer.classList.add('src-container');
-
-    document.querySelector('.main').after(srcContainer);
   }
 
   function startGame(e) {
@@ -340,8 +318,48 @@ window.onload = () => {
 
     nodeList.forEach((node) => audioSources.push(node.innerText));
     setTimeout(() => {
-      sayRandomWord(audioSources);
+      sayRandomWord(audioSources, currentSrc, counter);
     }, 200);
+  }
+
+  function createResultImage(state, err) {
+    const success = document.createElement('div');
+    const phrase = document.createElement('p');
+    success.classList.add('success');
+
+    if (state) {
+      phrase.innerText = 'Win!';
+
+      const audio = new Audio('src/assets/audio/success.mp3');
+      audio.play();
+    }
+    if (!state) {
+      success.classList.add('failure');
+      phrase.innerText = `${err} Error(s)!`;
+
+      const audio = new Audio('src/assets/audio/failure.mp3');
+      audio.play();
+    }
+
+    const switcherBlock = document.querySelector('.mode-switcher');
+
+    switcherBlock.remove();
+    document.querySelector('.play-button').remove();
+    success.prepend(phrase);
+    document.querySelector('.categories').append(success);
+
+    setTimeout(() => {
+      categoryLinks.forEach((link) => {
+        link.classList.remove('category-link-active');
+        if (link.innerText === 'Main Page') link.classList.add('category-link-active');
+      });
+
+      success.remove();
+      document.querySelector('.header').append(switcherBlock);
+      main.lastElementChild.remove();
+      playButton.remove();
+      main.append(categories);
+    }, 1500);
   }
 
   function checkIfTrue(e) {
@@ -404,73 +422,6 @@ window.onload = () => {
     }
   }
 
-  function createStarsLine() {
-    const starsLine = document.createElement('div');
-    starsLine.classList.add('stars-line');
-    document.querySelector('.categories').prepend(starsLine);
-  }
-
-  function addStars(src) {
-    const line = document.querySelector('.stars-line');
-    const star = document.createElement('img');
-
-    star.setAttribute('src', src);
-    star.classList.add('star');
-
-    line.append(star);
-
-    if (line.lastElementChild.getBoundingClientRect().left < document.querySelector('.categories').getBoundingClientRect().left) {
-      line.prepend(star);
-    }
-  }
-
-  function sayRandomWord(arr) {
-    currentSrc = arr[counter];
-
-    const audio = new Audio(arr[counter]);
-    audio.play();
-  }
-
-  function createResultImage(state, err) {
-    const success = document.createElement('div');
-    const phrase = document.createElement('p');
-    success.classList.add('success');
-
-    if (state) {
-      phrase.innerText = 'Win!';
-
-      const audio = new Audio('src/assets/audio/success.mp3');
-      audio.play();
-    }
-    if (!state) {
-      success.classList.add('failure');
-      phrase.innerText = `${err} Error(s)!`;
-
-      const audio = new Audio('src/assets/audio/failure.mp3');
-      audio.play();
-    }
-
-    const switcherBlock = document.querySelector('.mode-switcher');
-
-    switcherBlock.remove();
-    document.querySelector('.play-button').remove();
-    success.prepend(phrase);
-    document.querySelector('.categories').append(success);
-
-    setTimeout(() => {
-      categoryLinks.forEach((link) => {
-        link.classList.remove('category-link-active');
-        if (link.innerText === 'Main Page') link.classList.add('category-link-active');
-      });
-
-      success.remove();
-      document.querySelector('.header').append(switcherBlock);
-      main.lastElementChild.remove();
-      playButton.remove();
-      main.append(categories);
-    }, 1500);
-  }
-
   // Statistic functions
 
   function createStatisticPage(e) {
@@ -511,7 +462,7 @@ window.onload = () => {
         const td5 = document.createElement('td');
         const td6 = document.createElement('td');
         const td7 = document.createElement('td');
-        const tr = document.createElement('tr');
+        const trow = document.createElement('tr');
 
         const { success } = cardsMap.get(data[i][j].word);
         const { failure } = cardsMap.get(data[i][j].word);
@@ -527,9 +478,9 @@ window.onload = () => {
         td4.classList.add('td-center'); td5.classList.add('td-center');
         td6.classList.add('td-center'); td7.classList.add('td-center');
 
-        tr.append(td1, td2, td3, td4, td5, td6, td7);
+        trow.append(td1, td2, td3, td4, td5, td6, td7);
 
-        stats.append(tr);
+        stats.append(trow);
       }
     }
 
@@ -564,113 +515,6 @@ window.onload = () => {
     };
   }
 
-  function countAttemps(card) {
-    const cardText = card.lastElementChild.firstElementChild.lastElementChild.innerText;
-    const obj = {};
-
-    Object.assign(obj, cardsMap.get(cardText));
-
-    obj.attempts++;
-    cardsMap.set(cardText, obj);
-  }
-
-  function countSuccessFailure(card, res) {
-    let key = card.getAttribute('src');
-    key = key.slice(18, key.length - 4);
-
-    const obj = {};
-
-    Object.assign(obj, cardsMap.get(key));
-
-    res ? obj.success++ : obj.failure++;
-
-    cardsMap.set(key, obj);
-  }
-
-  function countStats(fail, win) {
-    let percent = 0;
-    if (fail > 0 || win > 0) {
-      percent = (fail / (win + fail)) * 100;
-    }
-    return percent.toFixed(2);
-  }
-
-  function sortLettersTable(n) {
-    let table; let rows; let switching; let i; let x; let y; let shouldSwitch; let dir; let
-      switchcount = 0;
-
-    table = document.querySelector('.stats');
-    switching = true;
-    dir = 'asc';
-
-    while (switching) {
-      switching = false;
-      rows = table.rows;
-      for (i = 1; i < (rows.length - 1); i++) {
-        shouldSwitch = false;
-        x = rows[i].getElementsByTagName('TD')[n];
-        y = rows[i + 1].getElementsByTagName('TD')[n];
-        if (dir === 'asc') {
-          if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-            shouldSwitch = true;
-            break;
-          }
-        } else if (dir === 'desc') {
-          if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-            shouldSwitch = true;
-            break;
-          }
-        }
-      }
-      if (shouldSwitch) {
-        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-        switching = true;
-        switchcount++;
-      } else if (switchcount === 0 && dir === 'asc') {
-        dir = 'desc';
-        switching = true;
-      }
-    }
-  }
-
-  function sortNumbersTable(n) {
-    let table; let rows; let switching; let i; let x; let y; let shouldSwitch; let dir; let
-      switchcount = 0;
-
-    table = document.querySelector('.stats');
-    switching = true;
-    dir = 'asc';
-
-    while (switching) {
-      switching = false;
-      rows = table.rows;
-      for (i = 1; i < (rows.length - 1); i++) {
-        shouldSwitch = false;
-        x = rows[i].getElementsByTagName('TD')[n];
-        y = rows[i + 1].getElementsByTagName('TD')[n];
-        if (dir === 'asc') {
-          if (Number(x.innerHTML) > Number(y.innerHTML)) {
-            shouldSwitch = true;
-            break;
-          }
-        } else if (dir === 'desc') {
-          if (Number(x.innerHTML) < Number(y.innerHTML)) {
-            shouldSwitch = true;
-            break;
-          }
-        }
-      }
-      if (shouldSwitch) {
-        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-        switching = true;
-        switchcount++;
-      } else if (switchcount === 0 && dir === 'asc') {
-        dir = 'desc';
-        switching = true;
-      }
-    }
-  }
-
   function showDifficultWords(e) {
     const { target } = e;
     if (target.innerText !== 'Repeat difficult words') return;
@@ -680,7 +524,9 @@ window.onload = () => {
     switcher.classList.add('input-disabled');
     switcher.disabled = true;
 
-    const sortedCardsMap = new Map(Array.from(cardsMap).sort((a, b) => b[1].failure - a[1].failure));
+    const sortedCardsMap = new Map(
+      Array.from(cardsMap).sort((a, b) => b[1].failure - a[1].failure),
+    );
     const difficultCollection = Array.from(sortedCardsMap.keys()).splice(0, 9);
     const closeButton = document.querySelector('.close-stats');
 
@@ -691,14 +537,14 @@ window.onload = () => {
         data[j].forEach((obj) => (obj.word === difficultCollection[i] ? wordsData.push(obj) : obj));
       }
     }
-    
+
     main.lastElementChild.remove();
     words.innerHTML = '';
     wordsData.forEach((card) => {
       if (cardsMap.get(card.word).failure !== 0) {
         words.append(new Card(card).createCard(false));
         main.append(words);
-        
+
         [...words.children].forEach((word) => {
           word.onmouseleave = () => {
             if (word.classList.contains('transparent')) {
@@ -707,8 +553,8 @@ window.onload = () => {
               word.firstElementChild.firstElementChild.lastElementChild.lastElementChild.classList.remove('rotate-sym-hidden');
             }
           };
-          word.onclick = (e) => {
-            if (word.firstElementChild.classList.contains('flipped') || e.target.classList.contains('rotate-sym')) return;
+          word.onclick = (evt) => {
+            if (word.firstElementChild.classList.contains('flipped') || evt.target.classList.contains('rotate-sym')) return;
             if (isPlaying) return;
             const audioSrc = word.getAttribute('data-audio');
 
@@ -727,17 +573,6 @@ window.onload = () => {
     if (document.querySelector('.stats') !== null) {
       closeButton.click();
     }
-  }
-
-  function clearStatistic(e) {
-    const { target } = e;
-    if (target.innerText !== 'Reset') return;
-
-    const td = document.querySelectorAll('.td-center');
-    td.forEach((td) => td.innerText = '0');
-    createCardsMap();
-
-    localStorage.removeItem('map');
   }
 
   document.addEventListener('click', createStatisticPage);
